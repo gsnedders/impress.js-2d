@@ -114,18 +114,16 @@
     
     // `translate` builds a translate transform string for given data.
     var translate = function ( t ) {
-        return " translate3d(" + t.x + "px," + t.y + "px," + t.z + "px) ";
+        return " translate(" + t.x + "px," + t.y + "px) ";
     };
     
     // `rotate` builds a rotate transform string for given data.
     // By default the rotations are in X Y Z order that can be reverted by passing `true`
     // as second parameter.
     var rotate = function ( r, revert ) {
-        var rX = " rotateX(" + r.x + "deg) ",
-            rY = " rotateY(" + r.y + "deg) ",
-            rZ = " rotateZ(" + r.z + "deg) ";
+        var rZ = " rotate(" + r.z + "deg) ";
         
-        return revert ? rZ+rY+rX : rX+rY+rZ;
+        return revert ? rZ : rZ;
     };
     
     // `scale` builds a scale transform string for given data.
@@ -168,7 +166,7 @@
     var body = document.body;
     
     var ua = navigator.userAgent.toLowerCase();
-    var impressSupported = 
+    var impressSupported = true;/*
                           // browser should support CSS 3D transtorms 
                            ( pfx("perspective") !== null ) &&
                            
@@ -179,7 +177,7 @@
                           // but some mobile devices need to be blacklisted,
                           // because their CSS 3D support or hardware is not
                           // good enough to run impress.js properly, sorry...
-                           ( ua.search(/(iphone)|(ipod)|(android)/) === -1 );
+                           ( ua.search(/(iphone)|(ipod)|(android)/) === -1 );*/
     
     if (!impressSupported) {
         // we can't be sure that `classList` is supported
@@ -348,7 +346,7 @@
                 height: toNumber( rootData.height, defaults.height ),
                 maxScale: toNumber( rootData.maxScale, defaults.maxScale ),
                 minScale: toNumber( rootData.minScale, defaults.minScale ),                
-                perspective: toNumber( rootData.perspective, defaults.perspective ),
+//                perspective: toNumber( rootData.perspective, defaults.perspective ),
                 transitionDuration: toNumber( rootData.transitionDuration, defaults.transitionDuration )
             };
             
@@ -379,7 +377,7 @@
             css(root, {
                 top: "50%",
                 left: "50%",
-                transform: perspective( config.perspective/windowScale ) + scale( windowScale )
+                transform: scale( windowScale )
             });
             css(canvas, rootStyles);
             
@@ -497,7 +495,7 @@
             css(root, {
                 // to keep the perspective look similar for different scales
                 // we need to 'scale' the perspective, too
-                transform: perspective( config.perspective / targetScale ) + scale( targetScale ),
+                transform: scale( targetScale ),
                 transitionDuration: duration + "ms",
                 transitionDelay: (zoomin ? delay : 0) + "ms"
             });
